@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#0066ff</color>
 
+    <color name="border">#CCC</color>
+
     <color name="offWhite">#FEFEFE</color>
     <color name="textBlack">#0A0A0A</color>
     <color name="textGray">#ccc</color>
