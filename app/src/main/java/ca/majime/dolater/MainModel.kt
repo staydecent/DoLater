@@ -16,12 +16,18 @@ class MainModel : ViewModel() {
 
     private val actor = actor<Action>(UI, Channel.CONFLATED) {
         for (action in this) when (action) {
+
             is UserInput -> {
                 mutableUserInput.value = action.input
             }
 
             is UserSubmit -> {
                 Log.d("MainModel", "UserSubmit ${action.input}")
+            }
+
+            is ToggleSelection -> {
+                Log.d("MainModel", "ToggleSelection ${action.viewName}")
+                // @TODO: Save toggle state for each viewName
             }
         }
     }

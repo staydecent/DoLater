@@ -94,5 +94,12 @@ class MainActivity : AppCompatActivity() {
                 false
             }
         }
+        date_1.setOnClickListener { getOptClickHandler("date_1") }
+        date_2.setOnClickListener { getOptClickHandler("date_2") }
+        date_3.setOnClickListener { getOptClickHandler("date_3") }
+    }
+
+    private fun getOptClickHandler(name: String) {
+        model.action(ToggleSelection(name))
     }
 }
