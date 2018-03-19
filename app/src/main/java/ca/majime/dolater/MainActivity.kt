@@ -87,20 +87,26 @@ class MainActivity : AppCompatActivity() {
                 model.action(UserInput(s.toString()))
             }
         })
+
+        date_1.setOnClickListener { getOptClickHandler("date", 1) }
+        date_2.setOnClickListener { getOptClickHandler("date", 2) }
+        date_3.setOnClickListener { getOptClickHandler("date", 3) }
+
+        time_1.setOnClickListener { getOptClickHandler("time", 1) }
+        time_2.setOnClickListener { getOptClickHandler("time", 2) }
+        time_3.setOnClickListener { getOptClickHandler("time", 3) }
+
         input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                model.action(UserSubmit(model.userInput.value, model.day.value))
+                model.action(UserSubmit(model.userInput.value, model.date.value))
                 true
             } else {
                 false
             }
         }
-        date_1.setOnClickListener { getOptClickHandler("date", 1) }
-        date_2.setOnClickListener { getOptClickHandler("date", 2) }
-        date_3.setOnClickListener { getOptClickHandler("date", 3) }
-        time_1.setOnClickListener { getOptClickHandler("time", 1) }
-        time_2.setOnClickListener { getOptClickHandler("time", 2) }
-        time_3.setOnClickListener { getOptClickHandler("time", 3) }
+        submit.setOnClickListener {
+            model.action(UserSubmit(model.userInput.value, model.date.value))
+        }
     }
 
     private fun getOptClickHandler(type: String, value: Int) {
