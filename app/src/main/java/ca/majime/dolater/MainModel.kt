@@ -11,8 +11,10 @@ import kotlinx.coroutines.experimental.channels.actor
 class MainModel : ViewModel() {
 
     private val mutableUserInput = MutableLiveData<String>()
+    private val mutableDay = MutableLiveData<Int>()
 
     val userInput: LiveData<String> = mutableUserInput
+    val day: LiveData<Int> = mutableDay
 
     private val actor = actor<Action>(UI, Channel.CONFLATED) {
         for (action in this) when (action) {
@@ -26,7 +28,7 @@ class MainModel : ViewModel() {
             }
 
             is ToggleSelection -> {
-                Log.d("MainModel", "ToggleSelection ${action.viewName}")
+                Log.d("MainModel", "ToggleSelection ${action.type} ${action.value}")
                 // @TODO: Save toggle state for each viewName
             }
         }

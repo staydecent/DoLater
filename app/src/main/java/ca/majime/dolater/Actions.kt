@@ -6,6 +6,6 @@ package ca.majime.dolater
 sealed class Action
 
 data class UserInput(val input: String) : Action()
-data class UserSubmit(val input: String?) : Action()
-data class ToggleSelection(val viewName: String) : Action()
+data class UserSubmit(val input: String?, val day: Int?) : Action()
+data class ToggleSelection(val type: String, val value: Int) : Action()
 
