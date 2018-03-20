@@ -3,7 +3,6 @@ package ca.majime.dolater
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -12,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
@@ -60,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private fun initModel() {
         model = ViewModelProviders.of(this).get(MainModel::class.java)
         model.userInput.observe(this, Observer { handleUserInput(it ?: "") })
+        model.timeOfDay.observe(this, Observer { handleTimeOfDayStyle(it ?: 0) })
     }
 
     private fun handleUserInput(input: String) {
@@ -69,6 +68,26 @@ class MainActivity : AppCompatActivity() {
             anim.moveY((details.height - resources.getDimensionPixelSize(R.dimen.margin)).toFloat(), 400)
         } else {
             anim.moveY(metrics.heightPixels.toFloat(), 300)
+        }
+    }
+
+    private fun handleTimeOfDayStyle(hour: Int) {
+        when (hour) {
+            8 -> {
+                time_1.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                time_2.backgroundTintList = null
+                time_3.backgroundTintList = null
+            }
+            12 -> {
+                time_1.backgroundTintList = null
+                time_2.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                time_3.backgroundTintList = null
+            }
+            18 -> {
+                time_1.backgroundTintList = null
+                time_2.backgroundTintList = null
+                time_3.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+            }
         }
     }
 
@@ -111,5 +130,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun getOptClickHandler(type: String, value: Int) {
         model.action(ToggleSelection(type, value))
+        if (type == "date") {
+            when (value) {
+                1 -> {
+                    date_1.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                    date_2.backgroundTintList = null
+                    date_3.backgroundTintList = null
+                }
+                2 -> {
+                    date_1.backgroundTintList = null
+                    date_2.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                    date_3.backgroundTintList = null
+                }
+                3 -> {
+                    date_1.backgroundTintList = null
+                    date_2.backgroundTintList = null
+                    date_3.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                }
+            }
+        }
     }
 }

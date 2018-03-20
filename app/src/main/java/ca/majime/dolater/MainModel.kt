@@ -4,19 +4,24 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
+import ca.majime.dolater.util.nextFriday
+import ca.majime.dolater.util.nextWeek
+import ca.majime.dolater.util.tomorrow
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.channels.actor
-import java.util.*
+import org.threeten.bp.LocalDate
 
 
 class MainModel : ViewModel() {
 
     private val mutableUserInput = MutableLiveData<String>()
-    private val mutableDate = MutableLiveData<Date>()
+    private val mutableDate = MutableLiveData<LocalDate>()
+    private val mutableTimeOfDay = MutableLiveData<Int>()
 
     val userInput: LiveData<String> = mutableUserInput
-    val date: LiveData<Date> = mutableDate
+    val date: LiveData<LocalDate> = mutableDate
+    val timeOfDay: LiveData<Int> = mutableTimeOfDay
 
     private val actor = actor<Action>(UI, Channel.CONFLATED) {
         for (action in this) when (action) {
@@ -26,28 +31,25 @@ class MainModel : ViewModel() {
             }
 
             is UserSubmit -> {
-                Log.d("MainModel", "UserSubmit ${action.input}")
+                Log.d("MainModel", "UserSubmit ${action.input} - ${mutableDate.value} - ${mutableTimeOfDay.value}")
             }
 
             is ToggleSelection -> {
                 Log.d("MainModel", "ToggleSelection ${action.type} ${action.value}")
-                val calendar = Calendar.getInstance()
 
-                if (action.type == "date") {
-                    when (action.value) {
-                        1 -> {
-                            calendar.add(Calendar.DAY_OF_YEAR, 1)
-                            val tomorrow = calendar.time
-                            Log.d("MainModel", "Tomorrow ${tomorrow}")
-                            mutableDate.value = calendar.time
+                when (action.type) {
+                    "date" -> {
+                        when (action.value) {
+                            1 -> mutableDate.value = tomorrow()
+                            2 -> mutableDate.value = nextFriday()
+                            3 -> mutableDate.value = nextWeek()
                         }
                     }
-                } else if (action.type == "time") {
-                    when (action.value) {
-                        1 -> {
-                            calendar.set(Calendar.HOUR_OF_DAY, 8)
-                            val tomorrow = calendar.time
-                            Log.d("MainModel", "Morning ${tomorrow}")
+                    "time" -> {
+                        when (action.value) {
+                            1 -> mutableTimeOfDay.value = 8
+                            2 -> mutableTimeOfDay.value = 12
+                            3 -> mutableTimeOfDay.value = 18
                         }
                     }
                 }
