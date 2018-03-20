@@ -2,19 +2,29 @@ package ca.majime.dolater.util
 
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.temporal.TemporalAdjusters.next
 
 
-fun tomorrow(): LocalDate {
-    return LocalDate.now().plusDays(1)
+fun tomorrow(date: LocalDateTime?): LocalDateTime {
+    val d: LocalDateTime = date ?: LocalDate.now().atTime(0, 0)
+    return d.plusDays(1)
 }
 
 
-fun nextFriday(): LocalDate {
-    return LocalDate.now().with(next(DayOfWeek.FRIDAY))
+fun nextFriday(date: LocalDateTime?): LocalDateTime {
+    val d: LocalDateTime = date ?: LocalDate.now().atTime(0, 0)
+    return d.with(next(DayOfWeek.FRIDAY))
 }
 
 
-fun nextWeek(): LocalDate {
-    return LocalDate.now().with(next(DayOfWeek.MONDAY))
+fun nextWeek(date: LocalDateTime?): LocalDateTime {
+    val d: LocalDateTime = date ?: LocalDate.now().atTime(0, 0)
+    return d.with(next(DayOfWeek.MONDAY))
+}
+
+
+fun setHour(date: LocalDateTime?, hour: Int) : LocalDateTime {
+    val d: LocalDateTime = date ?: LocalDate.now().atTime(0, 0)
+    return d.withHour(hour)
 }

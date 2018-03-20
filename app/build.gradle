@@ -43,4 +43,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
+
+    compile 'org.jetbrains.anko:anko-sqlite:0.10.0'
 }

@@ -16,7 +16,9 @@ import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.view.inputmethod.EditorInfo
 import ca.majime.dolater.util.MoveAnim
+import ca.majime.dolater.util.database
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.db.insert
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +60,6 @@ class MainActivity : AppCompatActivity() {
     private fun initModel() {
         model = ViewModelProviders.of(this).get(MainModel::class.java)
         model.userInput.observe(this, Observer { handleUserInput(it ?: "") })
-        model.timeOfDay.observe(this, Observer { handleTimeOfDayStyle(it ?: 0) })
     }
 
     private fun handleUserInput(input: String) {
@@ -72,23 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleTimeOfDayStyle(hour: Int) {
-        when (hour) {
-            8 -> {
-                time_1.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
-                time_2.backgroundTintList = null
-                time_3.backgroundTintList = null
-            }
-            12 -> {
-                time_1.backgroundTintList = null
-                time_2.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
-                time_3.backgroundTintList = null
-            }
-            18 -> {
-                time_1.backgroundTintList = null
-                time_2.backgroundTintList = null
-                time_3.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
-            }
-        }
+
     }
 
     private fun initDetailsView() {
@@ -117,14 +102,24 @@ class MainActivity : AppCompatActivity() {
 
         input.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                model.action(UserSubmit(model.userInput.value, model.date.value))
+                handleSubmit()
                 true
             } else {
                 false
             }
         }
         submit.setOnClickListener {
-            model.action(UserSubmit(model.userInput.value, model.date.value))
+            handleSubmit()
+        }
+    }
+
+    private fun handleSubmit() {
+        database.use {
+            insert("Reminder",
+                    "_id" to null,
+                    "text" to model.userInput.value,
+                    "date" to model.date.value
+            )
         }
     }
 
@@ -146,6 +141,25 @@ class MainActivity : AppCompatActivity() {
                     date_1.backgroundTintList = null
                     date_2.backgroundTintList = null
                     date_3.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                }
+            }
+        }
+        else if (type == "time") {
+            when (value) {
+                1 -> {
+                    time_1.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                    time_2.backgroundTintList = null
+                    time_3.backgroundTintList = null
+                }
+                2 -> {
+                    time_1.backgroundTintList = null
+                    time_2.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
+                    time_3.backgroundTintList = null
+                }
+                3 -> {
+                    time_1.backgroundTintList = null
+                    time_2.backgroundTintList = null
+                    time_3.backgroundTintList = ContextCompat.getColorStateList(this, R.color.textGray)
                 }
             }
         }
