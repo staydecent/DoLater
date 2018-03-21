@@ -19,6 +19,7 @@ import ca.majime.dolater.util.MoveAnim
 import ca.majime.dolater.util.database
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.startActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -72,10 +73,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleTimeOfDayStyle(hour: Int) {
-
-    }
-
     private fun initDetailsView() {
         this.windowManager.defaultDisplay.getMetrics(metrics)
         details.y = metrics.heightPixels.toFloat()
@@ -118,9 +115,11 @@ class MainActivity : AppCompatActivity() {
             insert("Reminder",
                     "_id" to null,
                     "text" to model.userInput.value,
-                    "date" to model.date.value
+                    "date" to model.date.value.toString()
             )
         }
+        startActivity<ListActivity>()
+        finish()
     }
 
     private fun getOptClickHandler(type: String, value: Int) {
